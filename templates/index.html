@@ -1,24 +1,31 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Produtos{% endblock %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meu Projeto</title>
+{% block content %}
+<h2>Lista de Produtos</h2>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-
-    <div class="container mt-5">
-        <h1 class="text-center">Olá, Bootstrap!</h1>
-        <p class="text-center">Template base para começar seu projeto.</p>
+<form action="{{ url_for('add_produto') }}" method="POST" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="nome" class="form-control" placeholder="Nome do produto" required>
+        </div>
+        <div class="col-md-6">
+            <input type="text" name="descricao" class="form-control" placeholder="Descrição" required>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">Adicionar</button>
+        </div>
     </div>
+</form>
 
-    <!-- Bootstrap JS Bundle (com Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+<ul class="list-group">
+    {% for produto in produtos %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ produto.nome }}
+        <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-sm btn-secondary">Ver detalhes</a>
+    </li>
+    {% else %}
+    <li class="list-group-item">Nenhum produto cadastrado.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
