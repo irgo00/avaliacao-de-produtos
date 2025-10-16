@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ produto.nome }}{% endblock %}
+{% block content %}
+<h2>Editar Produto</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input type="text" name="nome" value="{{ produto.nome }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descrição</label>
+        <textarea name="descricao" class="form-control" required>{{ produto.descricao }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Imagem</label>
+        <input type="file" name="imagem" class="form-control">
+        {% if produto.imagem %}
+        <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" width="100" class="mt-2 rounded">
+        {% endif %}
+    </div>
+    <button class="btn btn-primary">Salvar Alterações</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

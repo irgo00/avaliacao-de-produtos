@@ -1,19 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Produtos{% endblock %}
-
 {% block content %}
+
 <h2>Lista de Produtos</h2>
 
-<form action="{{ url_for('add_produto') }}" method="POST" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
+<form action="{{ url_for('add_produto') }}" method="POST" enctype="multipart/form-data" class="mb-4">
+    <div class="row g-2">
+        <div class="col-md-3">
             <input type="text" name="nome" class="form-control" placeholder="Nome do produto" required>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <input type="text" name="descricao" class="form-control" placeholder="Descrição" required>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-primary w-100">Adicionar</button>
+        <div class="col-md-3">
+            <input type="file" name="imagem" class="form-control">
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-primary w-100">+</button>
         </div>
     </div>
 </form>
@@ -21,8 +24,17 @@
 <ul class="list-group">
     {% for produto in produtos %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
-        {{ produto.nome }}
-        <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-sm btn-secondary">Ver detalhes</a>
+        <div>
+            {% if produto.imagem %}
+            <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" width="60" class="me-2 rounded">
+            {% endif %}
+            {{ produto.nome }}
+        </div>
+        <div>
+            <a href="{{ url_for('produto', id=produto.id) }}" class="btn btn-sm btn-outline-secondary">Ver</a>
+            <a href="{{ url_for('editar', id=produto.id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+            <a href="{{ url_for('delete_produto', id=produto.id) }}" class="btn btn-sm btn-outline-danger">Excluir</a>
+        </div>
     </li>
     {% else %}
     <li class="list-group-item">Nenhum produto cadastrado.</li>
