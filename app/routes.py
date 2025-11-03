@@ -8,8 +8,18 @@ def init_routes(app):
 
     @app.route('/')
     def index():
-        produtos = Produto.query.all()
-        return render_template('index.html', produtos=produtos)
+            produtos = Produto.query.all()
+            medias = []
+            nomes = []
+            for produto in produtos:
+                avaliacoes = produto.avaliacoes
+                if avaliacoes:
+                    media = sum(a.nota for a in avaliacoes) / len(avaliacoes)
+                else:
+                    media = None
+                medias.append(media)
+                nomes.append(produto.nome)
+            return render_template('index.html', produtos=produtos, medias=medias, nomes=nomes)
 
     @app.route('/produto/<int:id>')
     def produto(id):
