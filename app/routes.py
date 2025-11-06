@@ -9,6 +9,11 @@ def init_routes(app):
     @app.route('/')
     def index():
             produtos = Produto.query.all()
+            return render_template('index.html', produtos=produtos)
+
+    @app.route('/estatisticas')
+    def estatisticas():
+            produtos = Produto.query.all()
             medias = []
             nomes = []
             for produto in produtos:
@@ -19,7 +24,7 @@ def init_routes(app):
                     media = None
                 medias.append(media)
                 nomes.append(produto.nome)
-            return render_template('index.html', produtos=produtos, medias=medias, nomes=nomes)
+            return render_template('estatisticas.html', medias=medias, nomes=nomes)
 
     @app.route('/produto/<int:id>')
     def produto(id):
@@ -41,7 +46,6 @@ def init_routes(app):
         novo = Produto(nome=nome, descricao=descricao, imagem=filename)
         db.session.add(novo)
         db.session.commit()
-        flash('Produto adicionado com sucesso!')
         return redirect(url_for('index'))
 
     @app.route('/editar/<int:id>', methods=['GET', 'POST'])
@@ -58,7 +62,6 @@ def init_routes(app):
                 produto.imagem = filename
 
             db.session.commit()
-            flash('Produto atualizado com sucesso!')
             return redirect(url_for('index'))
 
         return render_template('editar.html', produto=produto)
@@ -68,7 +71,6 @@ def init_routes(app):
         produto = Produto.query.get_or_404(id)
         db.session.delete(produto)
         db.session.commit()
-        flash('Produto removido com sucesso!')
         return redirect(url_for('index'))
 
     @app.route('/avaliar/<int:produto_id>', methods=['POST'])
@@ -78,5 +80,4 @@ def init_routes(app):
         avaliacao = Avaliacao(nota=nota, comentario=comentario, produto_id=produto_id)
         db.session.add(avaliacao)
         db.session.commit()
-        flash('Avaliação registrada!')
         return redirect(url_for('produto', id=produto_id))
